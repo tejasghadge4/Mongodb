@@ -1,0 +1,236 @@
+test> show dbs;
+admin     40.00 KiB
+amazon    72.00 KiB
+config    60.00 KiB
+local     88.00 KiB
+test      68.00 KiB
+whatsapp  72.00 KiB
+
+test> use Practise;
+switched to db Practise
+Practise> db.createCollection("Person");
+{ ok: 1 }
+Practise> db.Person.insertOne({name: "Alice",age: 20,city: "New York"});
+{
+  acknowledged: true,
+  insertedId: ObjectId('66cf6d005e6f3875c2c0f619')
+}
+Practise> db.Person.insertMany([
+... {name: "Alice",age: 20,city: "New York"},
+... {name: "Charlie",age: 22,city: "Paris"},
+... {name: "Bob",age: 24,city: "Berlin"},
+... {name: "John",age: 21,city: "Moscow"},
+... {name: "David",age: 25,city: "Delhi"}
+... ]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('66cf6dc15e6f3875c2c0f61a'),
+    '1': ObjectId('66cf6dc15e6f3875c2c0f61b'),
+    '2': ObjectId('66cf6dc15e6f3875c2c0f61c'),
+    '3': ObjectId('66cf6dc15e6f3875c2c0f61d'),
+    '4': ObjectId('66cf6dc15e6f3875c2c0f61e')
+  }
+}
+Practise> db.Person.find();
+[
+  {
+    _id: ObjectId('66cf6d005e6f3875c2c0f619'),
+    name: 'Alice',
+    age: 20,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61a'),
+    name: 'Alice',
+    age: 20,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61b'),
+    name: 'Charlie',
+    age: 22,
+    city: 'Paris'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61c'),
+    name: 'Bob',
+    age: 24,
+    city: 'Berlin'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61d'),
+    name: 'John',
+    age: 21,
+    city: 'Moscow'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61e'),
+    name: 'David',
+    age: 25,
+    city: 'Delhi'
+  }
+]
+Practise> db.Person.deleteOne({_id: ObjectId('66cf6d005e6f3875c2c0f619')});
+{ acknowledged: true, deletedCount: 1 }
+Practise> db.Person.find();
+[
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61a'),
+    name: 'Alice',
+    age: 20,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61b'),
+    name: 'Charlie',
+    age: 22,
+    city: 'Paris'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61c'),
+    name: 'Bob',
+    age: 24,
+    city: 'Berlin'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61d'),
+    name: 'John',
+    age: 21,
+    city: 'Moscow'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61e'),
+    name: 'David',
+    age: 25,
+    city: 'Delhi'
+  }
+]
+Practise> db.Person.updateOne(
+... {name: "Alice"},
+... {$set: {age: 29}}
+... );
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+Practise> db.Person.find();
+[
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61a'),
+    name: 'Alice',
+    age: 29,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61b'),
+    name: 'Charlie',
+    age: 22,
+    city: 'Paris'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61c'),
+    name: 'Bob',
+    age: 24,
+    city: 'Berlin'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61d'),
+    name: 'John',
+    age: 21,
+    city: 'Moscow'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61e'),
+    name: 'David',
+    age: 25,
+    city: 'Delhi'
+  }
+]
+Practise> db.Person.deleteOne({name: "Bob"});
+{ acknowledged: true, deletedCount: 1 }
+Practise> db.Person.find();
+[
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61a'),
+    name: 'Alice',
+    age: 29,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61b'),
+    name: 'Charlie',
+    age: 22,
+    city: 'Paris'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61d'),
+    name: 'John',
+    age: 21,
+    city: 'Moscow'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61e'),
+    name: 'David',
+    age: 25,
+    city: 'Delhi'
+  }
+]
+Practise> db.Person.deleteMany({name: "Bob"});
+{ acknowledged: true, deletedCount: 0 }
+Practise> db.Person.find();
+[
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61a'),
+    name: 'Alice',
+    age: 29,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61b'),
+    name: 'Charlie',
+    age: 22,
+    city: 'Paris'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61d'),
+    name: 'John',
+    age: 21,
+    city: 'Moscow'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61e'),
+    name: 'David',
+    age: 25,
+    city: 'Delhi'
+  }
+]
+Practise> db.Person.deleteMany(
+... {name: "David"},
+... {city: "Moscow"}
+... );
+{ acknowledged: true, deletedCount: 1 }
+Practise> db.Person.find();
+[
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61a'),
+    name: 'Alice',
+    age: 29,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61b'),
+    name: 'Charlie',
+    age: 22,
+    city: 'Paris'
+  },
+  {
+    _id: ObjectId('66cf6dc15e6f3875c2c0f61d'),
+    name: 'John',
+    age: 21,
+    city: 'Moscow'
+  }
+]
