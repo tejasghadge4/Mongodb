@@ -1,0 +1,681 @@
+test> show dbs;
+Practise  72.00 KiB
+admin     40.00 KiB
+amazon    72.00 KiB
+config    72.00 KiB
+local     88.00 KiB
+test       8.00 KiB
+users     72.00 KiB
+whatsapp  72.00 KiB
+test> use users;
+switched to db users
+users> show collections;
+user
+users
+users> db.user.find();
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+
+
+1. Comparison Operator:
+
+
+users> db.user.find({ age: { $eq: 30 } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  }
+]
+users> db.user.find({ age: { $gt: 25 } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  }
+]
+users> db.user.find({ age: { $gte: 25 } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  }
+]
+users> db.user.find({ age: { $lt: 30 } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+users> db.user.find({ age: { $lte: 30 } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+users> db.user.find({ age: { $ne: 30 } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+
+users> db.user.find({ city: { $in: ["New York", "Los Angeles"] } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  }
+]
+
+users> db.user.find({ city: { $nin: ["New York", "Los Angeles"] } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+
+
+2. Logical Operator:
+
+
+users> db.user.find({ $and: [{ age: { $gt: 25} }, { city: "New York" }] });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  }
+]
+users> db.user.find({ $or: [{ age: { $gt: 25} }, { city: "Los Angeles" }] });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  }
+]
+
+users> db.user.find({ age: { $not: { $gt: 30 } } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+users> db.user.find({ $nor: [{age: { $gt: 30} }, { city: "New York" }] });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+
+
+3. Element Operator:
+
+
+users> db.user.find({ age: { $exists: True } });
+ReferenceError: True is not defined
+users> db.user.find({ age: { $exists: true } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+users> db.user.find({ age: { $type: "int" } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+
+
+4. Evalution Operator:
+
+
+users> db.user.find({ name: { $regex: /^A/ } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York'
+  }
+]
+users> db.user.find({ age: { $mod: [5, 0] } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  }
+]
+users> db.user.find({ $expr: { $gt: ["$age", 25] } });
+[
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  }
+]
+
+
+5. Update Operator:
+
+
+users> db.user.updateOne({ name: "Alice" }, { $set: { age: 26 } });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+users> db.user.find();
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    age: 26,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+users> db.user.updateOne({ name: "Alice" }, { $unset: { age: ""} });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+users> db.user.find();
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+users> db.user.updateOne({ name: "Alice" }, { $inc: { age: 1 } });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+users> db.user.find();
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    city: 'New York',
+    age: 1
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+users> db.user.updateOne({ name: "Alice" }, { $rename: { "age": "yearsOld"} });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+users> db.user.find();
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    city: 'New York',
+    yearsOld: 1
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+users> db.user.updateOne({ name: "Alice" }, { $min: { age: 20 } });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+users> db.user.find();
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    city: 'New York',
+    yearsOld: 1,
+    age: 20
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+users> db.user.updateOne({ name: "Alice" }, { $max: { age: 30 } });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+users> db.user.find();
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    city: 'New York',
+    yearsOld: 1,
+    age: 30
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
