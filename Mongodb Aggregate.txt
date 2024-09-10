@@ -1,0 +1,240 @@
+test> show dbs;
+Practise  72.00 KiB
+admin     40.00 KiB
+amazon    72.00 KiB
+config    72.00 KiB
+local     88.00 KiB
+test       8.00 KiB
+users     88.00 KiB
+whatsapp  72.00 KiB
+test> use users;
+switched to db users
+users> show collections;
+user
+users
+
+users> db.user.find().pretty();
+[
+  {
+    _id: ObjectId('66de9458db588842f35209af'),
+    name: 'Alice',
+    city: 'New York',
+    yearsOld: 1,
+    age: 30
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b0'),
+    name: 'Bob',
+    age: 30,
+    city: 'Los Angeles'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b1'),
+    name: 'Charlie',
+    age: 35,
+    city: 'Chicago'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b2'),
+    name: 'David',
+    age: 28,
+    city: 'New York'
+  },
+  {
+    _id: ObjectId('66de9458db588842f35209b3'),
+    name: 'Eva',
+    age: 22,
+    city: 'Boston'
+  }
+]
+
+
+1. Sum Function: Sum of values.
+
+
+users> db.user.aggregate([
+... { $group: { _id: null, totalAge: { $sum: "$age" } } }
+... ]);
+[ { _id: null, totalAge: 145 } ]
+
+users> db.user.aggregate([
+... { $group: { _id: "$city", totalAge: { $sum: "$age" } } }
+... ]);
+[
+  { _id: 'New York', totalAge: 58 },
+  { _id: 'Los Angeles', totalAge: 30 },
+  { _id: 'Chicago', totalAge: 35 },
+  { _id: 'Boston', totalAge: 22 }
+]
+
+
+2. Average Function: Average value.
+
+
+users> db.user.aggregate([
+... { $group: { _id: null, avgAge: { $avg: "$age" } } }
+... ]);
+[ { _id: null, avgAge: 29 } ]
+
+users> db.user.aggregate([
+... { $group: { _id: "$city", avgAge: { $avg: "$age" } } }
+... ]);
+[
+  { _id: 'Boston', avgAge: 22 },
+  { _id: 'Los Angeles', avgAge: 30 },
+  { _id: 'Chicago', avgAge: 35 },
+  { _id: 'New York', avgAge: 29 }
+]
+
+
+3. Minimum Function: Minimum v.alue
+
+
+users> db.user.aggregate([
+... { $group: { _id: null, minAge: { $min: "$age" } } }
+... ]);
+[ { _id: null, minAge: 22 } ]
+
+users> db.user.aggregate([
+... { $group: { _id: "$city", minAge: { $min: "$age" } } }
+... ]);
+[
+  { _id: 'New York', minAge: 28 },
+  { _id: 'Boston', minAge: 22 },
+  { _id: 'Chicago', minAge: 35 },
+  { _id: 'Los Angeles', minAge: 30 }
+]
+
+
+4. Maximum Function: Maximum value.
+
+
+users> db.user.aggregate([
+... { $group: { _id: null, maxAge: { $max: "$age" } } }
+... ]);
+[ { _id: null, maxAge: 35 } ]
+
+users> db.user.aggregate([
+... { $group: { _id: "$city", maxAge: { $max: "$age" } } }
+... ]);
+[
+  { _id: 'Boston', maxAge: 22 },
+  { _id: 'Los Angeles', maxAge: 30 },
+  { _id: 'Chicago', maxAge: 35 },
+  { _id: 'New York', maxAge: 30 }
+]
+
+
+5. Count Function: Count documents.
+
+
+users> db.user.aggregate([
+... { $count: "totallUsers"}
+... ]);
+[ { totallUsers: 5 } ]
+
+users> db.user.aggregate([
+... { $group: { _id: "$city", totalUsers: { $sum: 1 } } }
+... ]);
+[
+  { _id: 'Los Angeles', totalUsers: 1 },
+  { _id: 'Chicago', totalUsers: 1 },
+  { _id: 'Boston', totalUsers: 1 },
+  { _id: 'New York', totalUsers: 2 }
+]
+
+
+6. First Function: First document in a group.
+
+
+users> db.user.aggregate([
+... { $sort: { name: 1 } },
+... { $group: { _id: "$city", firstUser: { $first: "$name" } } }
+... ]);
+[
+  { _id: 'New York', firstUser: 'Alice' },
+  { _id: 'Los Angeles', firstUser: 'Bob' },
+  { _id: 'Chicago', firstUser: 'Charlie' },
+  { _id: 'Boston', firstUser: 'Eva' }
+]
+
+users> db.user.aggregate([ { $sort: { name: 1 } }, { $group: { _id: "$city", firstUser: { $first: "$name" } } }] );
+[
+  { _id: 'New York', firstUser: 'Alice' },
+  { _id: 'Boston', firstUser: 'Eva' },
+  { _id: 'Los Angeles', firstUser: 'Bob' },
+  { _id: 'Chicago', firstUser: 'Charlie' }
+]
+
+
+7. Last Function: Last document in a group.
+
+
+users> db.user.aggregate([
+...  { $sort: { name: 1 } }, { $group: { _id: "$city", lastUser: { $last: "$name" } } }
+... ]);
+[
+  { _id: 'New York', lastUser: 'David' },
+  { _id: 'Los Angeles', lastUser: 'Bob' },
+  { _id: 'Chicago', lastUser: 'Charlie' },
+  { _id: 'Boston', lastUser: 'Eva' }
+]
+
+
+8. Push Function: Add values to an array.
+
+users> db.user.aggregate([
+... { $group: { _id: "$city", users: { $push: "$name" } } }
+... ]);
+[
+  { _id: 'Boston', users: [ 'Eva' ] },
+  { _id: 'Los Angeles', users: [ 'Bob' ] },
+  { _id: 'Chicago', users: [ 'Charlie' ] },
+  { _id: 'New York', users: [ 'Alice', 'David' ] }
+]
+
+
+9. AddToSet Function: Add unique values to an array.
+
+
+users> db.user.aggregate([
+... { $group: { _id: null, uniqueCities: { $addToSet: "$city" } } }
+... ]);
+[
+  {
+    _id: null,
+    uniqueCities: [ 'Boston', 'Los Angeles', 'New York', 'Chicago' ]
+  }
+]
+
+
+10. Project Function: Reshape Documents.
+
+users> db.user.aggregate([
+... { $project: { _id: 0, name: 1, city: 1 } }
+... ]);
+[
+  { name: 'Alice', city: 'New York' },
+  { name: 'Bob', city: 'Los Angeles' },
+  { name: 'Charlie', city: 'Chicago' },
+  { name: 'David', city: 'New York' },
+  { name: 'Eva', city: 'Boston' }
+]
+
+
+A Complex Aggregation Example:
+
+
+users> db.user.aggregate([
+... { $group: {
+... _id: "$city",
+... avgAge: { $avg: "$age" },
+... userNames: { $push: "$name" }
+... } }
+... ]);
+[
+  { _id: 'Boston', avgAge: 22, userNames: [ 'Eva' ] },
+  { _id: 'Los Angeles', avgAge: 30, userNames: [ 'Bob' ] },
+  { _id: 'Chicago', avgAge: 35, userNames: [ 'Charlie' ] },
+  { _id: 'New York', avgAge: 29, userNames: [ 'Alice', 'David' ] }
+]
